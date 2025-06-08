@@ -5,13 +5,13 @@ import (
 	"strings"
 )
 
-type jwtBuilder struct {
+type JwtBuilder struct {
 	*jwtHeader
 	*jwtClaims
 }
 
-func (jm *JwtManager) NewBuilder() *jwtBuilder {
-	jwtBuilder := &jwtBuilder{
+func (jm *JwtManager) NewBuilder() *JwtBuilder {
+	jwtBuilder := &JwtBuilder{
 		jwtHeader: &jwtHeader{&jwtPart{}},
 		jwtClaims: &jwtClaims{&jwtPart{}},
 	}

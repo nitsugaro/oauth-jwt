@@ -28,7 +28,7 @@ func HmacHash(content []byte, secret []byte, alg HS_ALG) ([]byte, error) {
 	return signature, nil
 }
 
-func (jm *JwtManager) SignHmac(jwtBuilder *jwtBuilder, alg HS_ALG) (string, error) {
+func (jm *JwtManager) SignHmac(jwtBuilder *JwtBuilder, alg HS_ALG) (string, error) {
 	jwtHeader := jwtBuilder.jwtHeader
 	jwtClaims := jwtBuilder.jwtClaims
 	secretKey := jm.GetKeyForSignSecret()

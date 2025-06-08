@@ -18,7 +18,7 @@ func getShaAlg(alg RS_ALG) crypto.Hash {
 	}
 }
 
-func (jm *JwtManager) SignRsa(jwtBuilder *jwtBuilder, alg RS_ALG) (string, error) {
+func (jm *JwtManager) SignRsa(jwtBuilder *JwtBuilder, alg RS_ALG) (string, error) {
 	jwtHeader := jwtBuilder.jwtHeader
 	jwtClaims := jwtBuilder.jwtClaims
 	rsaKey := jm.GetKeyForSignRsa()
