@@ -17,17 +17,33 @@ func testJwt(jwt string, jm *oauthjwt.JwtManager, t *testing.T) {
 		t.Errorf("signed jwt must have 3 parts and got %v", len(jwtParts))
 	}
 
-	parserJwt, err := oauthjwt.ParseJwt(jwt)
+	parsedJwt, err := oauthjwt.ParseJwt(jwt)
 	if err != nil {
 		t.Errorf("parse jwt got an error %v", err.Error())
 	}
 
-	if parserJwt.GetSub() != "1234" {
-		t.Errorf("expected sub claim '1234' and got %v", parserJwt.GetSub())
+	if parsedJwt.GetSub() != "1234" {
+		t.Errorf("expected sub claim '1234' and got %v", parsedJwt.GetSub())
 	}
 
-	if !jm.Verify(parserJwt) {
+	if !jm.Verify(parsedJwt) {
 		t.Errorf("expected verify jwt equal to 'true' but got 'false'")
+	}
+
+	jwtBuilder := jm.NewBuilderFromJwt(parsedJwt)
+	jwtBuilder.SetClaim("new-claim", "new-claim-value")
+	newJwt, err := jm.Sign(jwtBuilder)
+	if err != nil {
+		t.Errorf("sign jwt from jwtBuilder error: %v", err.Error())
+	}
+
+	newParsedJwt, err := oauthjwt.ParseJwt(newJwt)
+	if err != nil {
+		t.Errorf("parse new jwt got an error %v", err.Error())
+	}
+
+	if newParsedJwt.GetClaim("new-claim").(string) != "new-claim-value" {
+		t.Errorf("new jwt claim 'new-claim' must be equal to 'new-claim-value' and got %s", newParsedJwt.GetClaim("new-claim"))
 	}
 }
 
