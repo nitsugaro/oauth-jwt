@@ -22,6 +22,13 @@ func (jm *JwtManager) NewBuilder() *JwtBuilder {
 	return jwtBuilder
 }
 
+func (jm *JwtManager) NewBuilderFromJwt(jwt *Jwt) *JwtBuilder {
+	return &JwtBuilder{
+		jwtHeader: jwt.jwtHeader,
+		jwtClaims: jwt.jwtClaims,
+	}
+}
+
 type Jwt struct {
 	*jwtHeader
 	*jwtClaims
@@ -44,6 +51,31 @@ func (jwt *Jwt) GetSignature() string {
 
 func (jwt *Jwt) GetContentForSign() []byte {
 	return []byte(jwt.headerBase64Url + "." + jwt.claimsBase64Url)
+}
+
+func (jm *JwtManager) Sign(jwtBuilder *JwtBuilder) (string, error) {
+	switch jwtBuilder.GetAlg() {
+	case HS256:
+		return jm.SignHmac(jwtBuilder, HS256_ALG)
+	case HS384:
+		return jm.SignHmac(jwtBuilder, HS384_ALG)
+	case HS512:
+		return jm.SignHmac(jwtBuilder, HS512_ALG)
+	case RS256:
+		return jm.SignRsa(jwtBuilder, RS256_ALG)
+	case RS384:
+		return jm.SignRsa(jwtBuilder, RS384_ALG)
+	case RS512:
+		return jm.SignRsa(jwtBuilder, RS512_ALG)
+	case ES256:
+		return jm.SignEc(jwtBuilder, ES256_ALG)
+	case ES384:
+		return jm.SignEc(jwtBuilder, ES384_ALG)
+	case ES512:
+		return jm.SignEc(jwtBuilder, ES512_ALG)
+	default:
+		return "", ErrInvalidAlgHeaderJwt
+	}
 }
 
 func (jm *JwtManager) Verify(jwt *Jwt) bool {

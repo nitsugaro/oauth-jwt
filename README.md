@@ -54,6 +54,8 @@ jwtBuilder.SetHeader("my-custom-header", "my-custom-val")
 
 /* SIGN */
 
+//1.
+
 jwtStr, err := jm.SignHmac(jwtBuilder, oauthjwt.HS256_ALG)
 
 jm.SignHmac(jwtBuilder, oauthjwt.HS384_ALG)
@@ -66,6 +68,19 @@ jm.SignRsa(jwtBuilder, oauthjwt.RS512_ALG)
 jm.SignEc(jwtBuilder, oauthjwt.ES256_ALG)
 jm.SignEc(jwtBuilder, oauthjwt.ES384_ALG)
 jm.SignEc(jwtBuilder, oauthjwt.ES512_ALG)
+
+//2.
+
+jwtBuilder := jm.NewBuilder()
+jwtBuilder.SetAlg(oauthjwt.HS256)
+jwtStr, err := jm.Sign(jwtBuilder)
+
+//3.
+
+jwt, err := oauthjwt.ParseJwt(jwtStr)
+jwtBuilder := jm.NewBuilderFromJwt(jwt)
+jwtBuilder.SetClaim("new-claim", "new-claim-value")
+jwtStr, err := jm.Sign(jwtBuilder)
 
 jwks := jm.GetPublicJWKs()
 
