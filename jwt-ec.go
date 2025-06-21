@@ -17,10 +17,13 @@ func intToFixedBytes(i *big.Int, size int) []byte {
 	return padded
 }
 
-func (jm *JwtManager) SignEc(jwtBuilder *JwtBuilder, alg ES_ALG) (string, error) {
+func (jm *JwtManager) SignEc(jwtBuilder *JwtBuilder, alg ES_ALG, ecKey *Key) (string, error) {
 	jwtHeader := jwtBuilder.jwtHeader
 	jwtClaims := jwtBuilder.jwtClaims
-	ecKey := jm.GetKeyForSignEc(alg)
+
+	if ecKey == nil {
+		ecKey = jm.GetKeyForSignEc(alg)
+	}
 
 	jwtHeader.SetAlg(ALG(alg))
 	jwtHeader.SetKid(ecKey.kid)

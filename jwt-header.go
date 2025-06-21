@@ -1,5 +1,22 @@
 package oauthjwt
 
+type IJwtHeader interface {
+	GetType() string
+	SetType(string)
+
+	GetAlg() ALG
+	SetAlg(ALG)
+
+	GetKid() string
+	SetKid(string)
+
+	GetJwk() map[string]interface{}
+	SetJwk(map[string]interface{})
+
+	GetHeader(string) interface{}
+	SetHeader(string, interface{}) *jwtHeader
+}
+
 type jwtHeader struct {
 	*jwtPart
 }
@@ -17,7 +34,7 @@ func (headers *jwtHeader) GetAlg() ALG {
 }
 
 func (headers *jwtHeader) SetAlg(alg ALG) {
-	headers.setField("alg", alg)
+	headers.setField("alg", string(alg))
 }
 
 func (headers *jwtHeader) GetKid() string {

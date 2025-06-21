@@ -29,6 +29,16 @@ func (jm *JwtManager) NewBuilderFromJwt(jwt *Jwt) *JwtBuilder {
 	}
 }
 
+type IJwt interface {
+	IJwtHeader
+	IJwtClaims
+
+	GetHeaderB64Url() string
+	GetClaimsB64Url() string
+	GetSignature() string
+	GetContentForSign() []byte
+}
+
 type Jwt struct {
 	*jwtHeader
 	*jwtClaims
@@ -56,23 +66,23 @@ func (jwt *Jwt) GetContentForSign() []byte {
 func (jm *JwtManager) Sign(jwtBuilder *JwtBuilder) (string, error) {
 	switch jwtBuilder.GetAlg() {
 	case HS256:
-		return jm.SignHmac(jwtBuilder, HS256_ALG)
+		return jm.SignHmac(jwtBuilder, HS256_ALG, nil)
 	case HS384:
-		return jm.SignHmac(jwtBuilder, HS384_ALG)
+		return jm.SignHmac(jwtBuilder, HS384_ALG, nil)
 	case HS512:
-		return jm.SignHmac(jwtBuilder, HS512_ALG)
+		return jm.SignHmac(jwtBuilder, HS512_ALG, nil)
 	case RS256:
-		return jm.SignRsa(jwtBuilder, RS256_ALG)
+		return jm.SignRsa(jwtBuilder, RS256_ALG, nil)
 	case RS384:
-		return jm.SignRsa(jwtBuilder, RS384_ALG)
+		return jm.SignRsa(jwtBuilder, RS384_ALG, nil)
 	case RS512:
-		return jm.SignRsa(jwtBuilder, RS512_ALG)
+		return jm.SignRsa(jwtBuilder, RS512_ALG, nil)
 	case ES256:
-		return jm.SignEc(jwtBuilder, ES256_ALG)
+		return jm.SignEc(jwtBuilder, ES256_ALG, nil)
 	case ES384:
-		return jm.SignEc(jwtBuilder, ES384_ALG)
+		return jm.SignEc(jwtBuilder, ES384_ALG, nil)
 	case ES512:
-		return jm.SignEc(jwtBuilder, ES512_ALG)
+		return jm.SignEc(jwtBuilder, ES512_ALG, nil)
 	default:
 		return "", ErrInvalidAlgHeaderJwt
 	}

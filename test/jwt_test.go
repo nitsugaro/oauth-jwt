@@ -52,17 +52,24 @@ func TestJwtHmac(t *testing.T) {
 	sub := "1234"
 	jwtBuilder.SetSub(sub)
 
-	jwt32, err := jmHmac32.SignHmac(jwtBuilder, oauthjwt.HS256_ALG)
+	jwt32, err := jmHmac32.SignHmac(jwtBuilder, oauthjwt.HS256_ALG, nil)
 	if err != nil {
 		t.Errorf("sign jwt expecred not get error and got %s", err.Error())
 	}
 	testJwt(jwt32, jmHmac32, t)
 
-	jwt64, err := jmHmac64.SignHmac(jwtBuilder, oauthjwt.HS512_ALG)
+	jwt64, err := jmHmac64.SignHmac(jwtBuilder, oauthjwt.HS512_ALG, nil)
 	if err != nil {
 		t.Errorf("sign jwt expecred not get error and got %s", err.Error())
 	}
 	testJwt(jwt64, jmHmac64, t)
+
+	newBuilder := jmHmac32.NewBuilder()
+	newBuilder.SetAlg(oauthjwt.HS256)
+	jwtFromSign, err := jmHmac32.Sign(newBuilder)
+	if err != nil || jwtFromSign == "" {
+		t.Errorf("sign jwt from newBuilder error: %v", err.Error())
+	}
 }
 
 func TestJwtRsa(t *testing.T) {
@@ -71,57 +78,57 @@ func TestJwtRsa(t *testing.T) {
 	jwtBuilder.SetSub(sub)
 
 	/* RSA 2048 */
-	jwt1, err := jmRsa2048.SignRsa(jwtBuilder, oauthjwt.RS256_ALG)
+	jwt1, err := jmRsa2048.SignRsa(jwtBuilder, oauthjwt.RS256_ALG, nil)
 	if err != nil {
 		t.Errorf("sign jwt expecred not get error and got %s", err.Error())
 	}
 	testJwt(jwt1, jmRsa2048, t)
 
-	jwt2, err := jmRsa2048.SignRsa(jwtBuilder, oauthjwt.RS384_ALG)
+	jwt2, err := jmRsa2048.SignRsa(jwtBuilder, oauthjwt.RS384_ALG, nil)
 	if err != nil {
 		t.Errorf("sign jwt expecred not get error and got %s", err.Error())
 	}
 	testJwt(jwt2, jmRsa2048, t)
 
-	jwt3, err := jmRsa2048.SignRsa(jwtBuilder, oauthjwt.RS512_ALG)
+	jwt3, err := jmRsa2048.SignRsa(jwtBuilder, oauthjwt.RS512_ALG, nil)
 	if err != nil {
 		t.Errorf("sign jwt expecred not get error and got %s", err.Error())
 	}
 	testJwt(jwt3, jmRsa2048, t)
 
 	/* RSA 3072 */
-	jwt4, err := jmRsa3072.SignRsa(jwtBuilder, oauthjwt.RS256_ALG)
+	jwt4, err := jmRsa3072.SignRsa(jwtBuilder, oauthjwt.RS256_ALG, nil)
 	if err != nil {
 		t.Errorf("sign jwt expecred not get error and got %s", err.Error())
 	}
 	testJwt(jwt4, jmRsa3072, t)
 
-	jwt5, err := jmRsa3072.SignRsa(jwtBuilder, oauthjwt.RS384_ALG)
+	jwt5, err := jmRsa3072.SignRsa(jwtBuilder, oauthjwt.RS384_ALG, nil)
 	if err != nil {
 		t.Errorf("sign jwt expecred not get error and got %s", err.Error())
 	}
 	testJwt(jwt5, jmRsa3072, t)
 
-	jwt6, err := jmRsa3072.SignRsa(jwtBuilder, oauthjwt.RS512_ALG)
+	jwt6, err := jmRsa3072.SignRsa(jwtBuilder, oauthjwt.RS512_ALG, nil)
 	if err != nil {
 		t.Errorf("sign jwt expecred not get error and got %s", err.Error())
 	}
 	testJwt(jwt6, jmRsa3072, t)
 
 	/* RSA 4096 */
-	jwt7, err := jmRsa4096.SignRsa(jwtBuilder, oauthjwt.RS256_ALG)
+	jwt7, err := jmRsa4096.SignRsa(jwtBuilder, oauthjwt.RS256_ALG, nil)
 	if err != nil {
 		t.Errorf("sign jwt expecred not get error and got %s", err.Error())
 	}
 	testJwt(jwt7, jmRsa4096, t)
 
-	jwt8, err := jmRsa4096.SignRsa(jwtBuilder, oauthjwt.RS384_ALG)
+	jwt8, err := jmRsa4096.SignRsa(jwtBuilder, oauthjwt.RS384_ALG, nil)
 	if err != nil {
 		t.Errorf("sign jwt expecred not get error and got %s", err.Error())
 	}
 	testJwt(jwt8, jmRsa4096, t)
 
-	jwt9, err := jmRsa4096.SignRsa(jwtBuilder, oauthjwt.RS512_ALG)
+	jwt9, err := jmRsa4096.SignRsa(jwtBuilder, oauthjwt.RS512_ALG, nil)
 	if err != nil {
 		t.Errorf("sign jwt expecred not get error and got %s", err.Error())
 	}
@@ -134,21 +141,21 @@ func TestJwtEc(t *testing.T) {
 	jwtBuilder.SetSub(sub)
 
 	/* EC 256 */
-	jwt1, err := jmEc256.SignEc(jwtBuilder, oauthjwt.ES256_ALG)
+	jwt1, err := jmEc256.SignEc(jwtBuilder, oauthjwt.ES256_ALG, nil)
 	if err != nil {
 		t.Errorf("sign jwt expecred not get error and got %s", err.Error())
 	}
 	testJwt(jwt1, jmEc256, t)
 
 	/* EC 384 */
-	jwt2, err := jmEc384.SignEc(jwtBuilder, oauthjwt.ES384_ALG)
+	jwt2, err := jmEc384.SignEc(jwtBuilder, oauthjwt.ES384_ALG, nil)
 	if err != nil {
 		t.Errorf("sign jwt expecred not get error and got %s", err.Error())
 	}
 	testJwt(jwt2, jmEc384, t)
 
 	/* EC 512 */
-	jwt3, err := jmEc512.SignEc(jwtBuilder, oauthjwt.ES512_ALG)
+	jwt3, err := jmEc512.SignEc(jwtBuilder, oauthjwt.ES512_ALG, nil)
 	if err != nil {
 		t.Errorf("sign jwt expecred not get error and got %s", err.Error())
 	}

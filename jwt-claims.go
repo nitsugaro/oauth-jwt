@@ -4,6 +4,32 @@ import (
 	"time"
 )
 
+type IJwtClaims interface {
+	GetSub() string
+	SetSub(string)
+
+	GetIss() string
+	SetIss(string)
+
+	GetAud() string
+	SetAud(string)
+
+	GetJti() string
+	SetJti(string)
+
+	GetScope() string
+	SetScope(string)
+
+	GetIat() time.Time
+	SetIat(time.Time)
+
+	GetExp() time.Time
+	SetExp(time.Time)
+
+	GetClaim(string) interface{}
+	SetClaim(string, interface{}) *jwtClaims
+}
+
 type jwtClaims struct {
 	*jwtPart
 }

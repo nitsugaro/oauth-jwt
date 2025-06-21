@@ -28,10 +28,13 @@ func HmacHash(content []byte, secret []byte, alg HS_ALG) ([]byte, error) {
 	return signature, nil
 }
 
-func (jm *JwtManager) SignHmac(jwtBuilder *JwtBuilder, alg HS_ALG) (string, error) {
+func (jm *JwtManager) SignHmac(jwtBuilder *JwtBuilder, alg HS_ALG, secretKey *Key) (string, error) {
 	jwtHeader := jwtBuilder.jwtHeader
 	jwtClaims := jwtBuilder.jwtClaims
-	secretKey := jm.GetKeyForSignSecret()
+
+	if secretKey == nil {
+		secretKey = jm.GetKeyForSignSecret()
+	}
 
 	jwtHeader.SetAlg(ALG(alg))
 	jwtHeader.SetKid(secretKey.kid)

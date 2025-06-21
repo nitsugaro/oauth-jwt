@@ -2,12 +2,16 @@
 
 Use this dependency for a simple adoption of JWT.
 
+```bash
+go get github.com/nitsugaro/oauth-jwt@latest
+```
+
 # Supported Algorithms
 
 ```json
-HS256, HS384, HS512
-RS256, RS384, RS512
-RS256, ES384, ES512
+HS256 HS384 HS512
+RS256 RS384 RS512
+RS256 ES384 ES512
 ```
 
 # Usage Examples
