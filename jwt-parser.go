@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-func ParseJwt(jwt string) (*Jwt, error) {
+func ParseJwt(jwt string) (IJwt, error) {
 	parts := strings.Split(jwt, ".")
 	if len(parts) != 3 {
 		return nil, ErrInvalidFormatJwt

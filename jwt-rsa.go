@@ -55,7 +55,7 @@ func (jm *JwtManager) SignRsa(jwtBuilder *JwtBuilder, alg RS_ALG, rsaKey *Key) (
 	return jwt, nil
 }
 
-func (jm *JwtManager) verifyRsa(jwt *Jwt) bool {
+func (jm *JwtManager) verifyRsa(jwt IJwt) bool {
 	kid := jwt.GetKid()
 	rsaKey := jm.GetKey(kid)
 	if rsaKey == nil {
@@ -67,7 +67,7 @@ func (jm *JwtManager) verifyRsa(jwt *Jwt) bool {
 		return false
 	}
 
-	signature, err := base64.RawURLEncoding.DecodeString(jwt.signature)
+	signature, err := base64.RawURLEncoding.DecodeString(jwt.GetSignature())
 	if err != nil {
 		return false
 	}

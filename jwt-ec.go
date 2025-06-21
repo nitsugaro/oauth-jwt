@@ -66,7 +66,7 @@ func (jm *JwtManager) SignEc(jwtBuilder *JwtBuilder, alg ES_ALG, ecKey *Key) (st
 	return jwt, nil
 }
 
-func (jm *JwtManager) verifyEc(jwt *Jwt) bool {
+func (jm *JwtManager) verifyEc(jwt IJwt) bool {
 	kid := jwt.GetKid()
 	ecKey := jm.GetKey(kid)
 	if ecKey == nil {
@@ -78,7 +78,7 @@ func (jm *JwtManager) verifyEc(jwt *Jwt) bool {
 		return false
 	}
 
-	signatureBytes, err := base64.RawURLEncoding.DecodeString(jwt.signature)
+	signatureBytes, err := base64.RawURLEncoding.DecodeString(jwt.GetSignature())
 	if err != nil {
 		return false
 	}

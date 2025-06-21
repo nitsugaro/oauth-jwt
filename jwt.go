@@ -22,10 +22,10 @@ func (jm *JwtManager) NewBuilder() *JwtBuilder {
 	return jwtBuilder
 }
 
-func (jm *JwtManager) NewBuilderFromJwt(jwt *Jwt) *JwtBuilder {
+func (jm *JwtManager) NewBuilderFromJwt(jwt IJwt) *JwtBuilder {
 	return &JwtBuilder{
-		jwtHeader: jwt.jwtHeader,
-		jwtClaims: jwt.jwtClaims,
+		jwtHeader: jwt.GetHeaders(),
+		jwtClaims: jwt.GetClaims(),
 	}
 }
 
@@ -37,6 +37,8 @@ type IJwt interface {
 	GetClaimsB64Url() string
 	GetSignature() string
 	GetContentForSign() []byte
+	GetHeaders() *jwtHeader
+	GetClaims() *jwtClaims
 }
 
 type Jwt struct {
@@ -61,6 +63,14 @@ func (jwt *Jwt) GetSignature() string {
 
 func (jwt *Jwt) GetContentForSign() []byte {
 	return []byte(jwt.headerBase64Url + "." + jwt.claimsBase64Url)
+}
+
+func (jwt *Jwt) GetHeaders() *jwtHeader {
+	return jwt.jwtHeader
+}
+
+func (jwt *Jwt) GetClaims() *jwtClaims {
+	return jwt.jwtClaims
 }
 
 func (jm *JwtManager) Sign(jwtBuilder *JwtBuilder) (string, error) {
@@ -88,7 +98,7 @@ func (jm *JwtManager) Sign(jwtBuilder *JwtBuilder) (string, error) {
 	}
 }
 
-func (jm *JwtManager) Verify(jwt *Jwt) bool {
+func (jm *JwtManager) Verify(jwt IJwt) bool {
 	alg := jwt.GetAlg()
 
 	if !slices.Contains(SUPPORTED_ALGORITHMS, alg) {

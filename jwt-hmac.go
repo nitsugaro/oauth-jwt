@@ -64,7 +64,7 @@ func (jm *JwtManager) SignHmac(jwtBuilder *JwtBuilder, alg HS_ALG, secretKey *Ke
 	return jwt, nil
 }
 
-func (jm *JwtManager) verifyHmac(jwt *Jwt) bool {
+func (jm *JwtManager) verifyHmac(jwt IJwt) bool {
 	kid := jwt.GetKid()
 	secretKey := jm.GetKey(kid)
 	if secretKey == nil {
@@ -77,5 +77,5 @@ func (jm *JwtManager) verifyHmac(jwt *Jwt) bool {
 		return false
 	}
 
-	return base64.RawURLEncoding.EncodeToString(signature) == jwt.signature
+	return base64.RawURLEncoding.EncodeToString(signature) == jwt.GetSignature()
 }
